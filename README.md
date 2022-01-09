@@ -12,6 +12,11 @@
 
 OpenVPN integration instructions: <http://www.duosecurity.com/docs/openvpn>
 
+# TODO
+
+- Document the SSM configuration
+- Document the required AWS permissions
+
 # Support
 
 Report any bugs, feature requests, etc. to us directly:
