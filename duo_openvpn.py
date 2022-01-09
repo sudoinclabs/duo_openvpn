@@ -16,6 +16,7 @@ import os
 import socket
 import sys
 import syslog
+import boto3
 
 import six
 from six.moves import http_client
@@ -398,10 +399,17 @@ def main(Client=Client, environ=os.environ):
     def get_config(k):
         v = environ.get(k)
         if v:
-            return v
+            if v.startswith("SSM:"):
+                ssm_key = v[":"][1]
+                ssm = boto3.client('ssm')
+                parameter = ssm.get_parameter(Name=ssm_key, WithDecryption=True)
+                return parameter['Parameter']['Value']
+            else:
+                return v
         else:
             log('required configuration parameter "{0:s}" not found'.format(k))
             failure(control)
+
 
     client = Client(
         ikey=get_config('ikey'),
